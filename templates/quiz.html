@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Quiz - Quiz Application{% endblock %}
-
 {% block content %}
-<h2>Quiz</h2>
+<h1>Quiz</h1>
+
 <form method="POST">
     {% for question in questions %}
-        <div>
-            <p><strong>{{ question.question }}</strong></p>
+        <div class="question">
+            <p>{{ question.question }}</p>
             <label>
-                <input type="radio" name="question_{{ question.id }}" value="A" required>
+                <input type="radio" name="question_{{ question.id }}" value="A">
                 {{ question.option_a }}
             </label><br>
             <label>
@@ -23,11 +22,14 @@
             <label>
                 <input type="radio" name="question_{{ question.id }}" value="D">
                 {{ question.option_d }}
-            </label><br>
+            </label><br><br>
         </div>
-        <hr>
     {% endfor %}
     <button type="submit">Submit</button>
 </form>
-<p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+{% if score is not none %}
+    <h2>Your Score: {{ score }}</h2>
+{% endif %}
+
 {% endblock %}
