@@ -6,27 +6,27 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import logging
 
-# Initialize the Flask app
+# Initializes the Flask app
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")  # Use environment variable for secret key
 
-# Configure the SQLite database
+# Configures the SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///quiz.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize the database and migrations
+# Initializes the database and migrations
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# Initialize the login manager
+# Initializes the login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"  # Redirect unauthorized users to login page
 
-# Enable logging
+# Enables logging
 logging.basicConfig(level=logging.DEBUG)
 
-# Define the User model
+# Defines the User model
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Primary key
     username = db.Column(db.String(150), nullable=False, unique=True)  # Username
@@ -38,7 +38,7 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-# Load user function for Flask-Login
+# Loads the user function for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -101,7 +101,7 @@ def logout():
 def home():
     return render_template("home.html")
 
-# Define the Quiz model
+# Defines the Quiz model
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Primary key
     question = db.Column(db.String(255), nullable=False)  # The question text
